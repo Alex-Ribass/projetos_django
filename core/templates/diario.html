@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Diário</title>
+</head>
+<body>
+    <h1>📓 Meu Diário Pessoal</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <button type="submit">Salvar no Diário</button>
+    </form>
+
+    <hr>
+
+    <h2>Memórias Antigas</h2>
+    {% for item in entradas %}
+        <div style="border: 1px solid #ccc; margin-bottom: 10px; padding: 10px;">
+            <h3>{{ item.titulo }}</h3>
+            <p>{{ item.conteudo }}</p>
+            <small>Postado em: {{ item.criado_em }}</small>
+        </div>
+    {% empty %}
+        <p>Ainda não há memórias salvas.</p>
+    {% endfor %}
+</body>
+</html>
