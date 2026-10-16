@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'produtos',
-    'rest_framework'
+    'rest_framework',
+    '02_api_produtos_generics.apps.ApiProdutosGenericsConfig',
 ]
 
 MIDDLEWARE = [
