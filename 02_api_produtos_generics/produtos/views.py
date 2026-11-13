@@ -4,25 +4,19 @@ from .models import Produto
 from .serializer import ProdutoSerializer
 
 
-class ProdutoListView(generics.ListAPIView):
-    serializer_class = ProdutoSerializer
+class ProdutoListCreateView(generics.ListCreateAPIView):
+  queryset = Produto.objects.all()
+  serializer_class = ProdutoSerializer
 
-    # Listar apenas os Produtos ativos.
-    def get_queryset(self):
-        return Produto.objects.filter(ativo=True)
+  def perform_create(self, serializer):
+    nome_informado = serializer.validated_data.get('nome')
 
-class ProdutoCreateView(generics.CreateAPIView):
-    queryset = Produto.objects.all()
-    serializer_class = ProdutoSerializer
+    if Produto.objects.filter(nome=nome_informado).exists():
+      raise ValidationError(
+          {'nome': [f'O Produto: {nome_informado} já existe.']}
+      )
 
-    def perform_create(self, serializer):
-
-        nome_informado = serializer.validated_data.get('nome')
-
-        if Produto.objects.filter(nome=nome_informado).exists():
-            raise ValidationError({"nome": [f'O Produto: {nome_informado} já existe.']})
-
-        serializer.save(ativo=True)
+    serializer.save(ativo=True)
 
 class ProdutoDetailView(generics.RetrieveAPIView):
     queryset = Produto.objects.all()
